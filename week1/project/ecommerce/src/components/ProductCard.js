@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 
 const ProductCard = ({ product }) => {
   return (
     <li className="product__card">
       <div className="product__content">
         <img src={product.image} alt={product.title} />
-        <span className="product__title">{product.title}</span>
+        <span className="product__title">{product.title.slice(5)}</span>
       </div>
     </li>
   );

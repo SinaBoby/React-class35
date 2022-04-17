@@ -1,21 +1,18 @@
-import React, { useState } from "react";
+import React from 'react';
 
-const NavListItem = ({ category, handleCategory }) => {
-  const [categoryStatus, setCategoryStatus] = useState(false);
+const NavListItem = ({ category, handleCategory, selected, onClickFunc }) => {
   return (
-    <li className="category__item">
-      <input
-        className={`category__btn ${
-          categoryStatus ? "category__btn--active" : ""
-        }`}
-        type="button"
-        value={category}
-        onClick={(e) => {
-          handleCategory(e.target.value);
-          setCategoryStatus(!categoryStatus);
-        }}
-      />
-    </li>
+    <div
+      className={
+        selected ? 'categories-item categories-item-selected ' : 'categories-item'
+      }
+      onClick={(e) => {
+        onClickFunc();
+        handleCategory(e.target.innerText);
+      }}
+    >
+      {category}
+    </div>
   );
 };
 
