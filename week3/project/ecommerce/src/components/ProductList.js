@@ -1,10 +1,10 @@
-import React from 'react';
+import React,{useContext} from 'react';
 import ProductCard from './ProductCard';
 import PropTypes from 'prop-types';
-
-const ProductList = ({ products }) => {
+import { ProductContext } from '../ProductContext';
+const ProductList = () => {
   
-  
+  const {products} = useContext(ProductContext)
   return (
     <ul className="product__list">
       {products.map((product, index) => (

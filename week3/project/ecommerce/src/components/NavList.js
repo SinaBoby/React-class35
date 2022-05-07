@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import NavListItem from './NavListItem';
+import { ProductContext } from '../ProductContext';
 
-const NavList = ({ setProducts, setLoading }) => {
+const NavList = ({  setLoading }) => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [categories, setCategories] = useState([]);
   const [isloading, setIsloading] = useState(true);
+  const {setProducts} = useContext(ProductContext)
   useEffect(() => {
     (async () => {
       try {

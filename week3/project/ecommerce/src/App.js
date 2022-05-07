@@ -1,6 +1,6 @@
 import './App.css';
 import NavList from './components/NavList';
-
+import { ProductProvider } from './ProductContext';
 import React,{  useState } from 'react';
 
 import ProductList from './components/ProductList';
@@ -11,15 +11,18 @@ function App() {
 
 
   return (
-    <div className="App">
+    <ProductProvider>
+  <div className="App">
       <header>
         <h1>Products</h1>
-        <NavList setLoading={setIsLoadingProduct} setProducts={setProducts}   />
+        <NavList setLoading={setIsLoadingProduct}    />
       </header>
       <main>
-        {isLoadingProduct? <h2>Is Loading...</h2> :<ProductList products={products} />}
+        {isLoadingProduct? <h2>Is Loading...</h2> :<ProductList  />}
       </main>
     </div>
+    </ProductProvider>
+  
   );
 }
 
