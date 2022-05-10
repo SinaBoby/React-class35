@@ -8,6 +8,7 @@ const NavListItem = ({ category, handleCategory, selected, onClickFunc }) => {
         selected ? 'categories-item categories-item-selected ' : 'categories-item'
       }
       onClick={(e) => {
+        
         onClickFunc();
         handleCategory(e.target.innerText);
       }}

@@ -1,28 +1,23 @@
 import './App.css';
 import NavList from './components/NavList';
-import { ProductProvider } from './ProductContext';
-import React,{  useState } from 'react';
-
+import React, { useState } from 'react';
 import ProductList from './components/ProductList';
+import Header from './components/Header';
 
 function App() {
-  const [products, setProducts] = useState([]);
-  const [isLoadingProduct, setIsLoadingProduct] = useState(true)
-
+  const [isLoadingProduct, setIsLoadingProduct] = useState(true);
 
   return (
-    <ProductProvider>
-  <div className="App">
-      <header>
-        <h1>Products</h1>
-        <NavList setLoading={setIsLoadingProduct}    />
-      </header>
+    <div className="App">
+      <Header />
+      <NavList setLoading={setIsLoadingProduct} />
       <main>
-        {isLoadingProduct? <h2>Is Loading...</h2> :<ProductList  />}
+        <ProductList
+          setLoading={setIsLoadingProduct}
+          isLoading={isLoadingProduct}
+        />
       </main>
     </div>
-    </ProductProvider>
-  
   );
 }
 

@@ -1,63 +1,43 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import NavListItem from './NavListItem';
 import { ProductContext } from '../ProductContext';
+import useFetch from '../hooks/useFetch';
 
-const NavList = ({  setLoading }) => {
+const NavList = ({ setLoading }) => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
-  const [categories, setCategories] = useState([]);
-  const [isloading, setIsloading] = useState(true);
-  const {setProducts} = useContext(ProductContext)
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await fetch('https://fakestoreapi.com/products');
-        const json = await response.json();
-        setProducts(json);
-        setLoading(false)
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, [setProducts]);
- 
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await fetch(
-          'https://fakestoreapi.com/products/categories',
-        );
-        const json = await response.json();
-        console.log(json);
-        setCategories(json);
-        setIsloading(false);
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, []);
+
+  const { setProducts } = useContext(ProductContext);
+
+  const [categories, isLoading, error] = useFetch(
+    'https://fakestoreapi.com/products/categories',
+  );
+
   const handleCategory = (categoryName) => {
+   
     (async () => {
       try {
-      setLoading(true)
+        setLoading(true);
         const response = await fetch(
           `https://fakestoreapi.com/products/category/${categoryName}`,
         );
         const json = await response.json();
+
         setProducts(json);
-        setLoading(false)
+        setLoading(false);
       } catch (error) {
         console.log(error);
+        setLoading(false);
       }
     })();
   };
 
   return (
     <div className="categories">
-      {isloading ? (
+      {isLoading ? (
         <h3>Is Loading...</h3>
-      ) : !categories ? (
-        <h3>No categories(Server Error)</h3>
+      ) : error ? (
+        <h3>{error.message}</h3>
       ) : (
         categories.map((category, index) => (
           <NavListItem
@@ -66,7 +46,6 @@ const NavList = ({  setLoading }) => {
             onClickFunc={() => setSelectedIndex(index)}
             category={category}
             handleCategory={handleCategory}
-            setProducts={setProducts}
           />
         ))
       )}
@@ -74,7 +53,6 @@ const NavList = ({  setLoading }) => {
   );
 };
 NavList.propTypes = {
-  setProducts: PropTypes.func.isRequired,
-  setLoading: PropTypes.func
-}
+  setLoading: PropTypes.func,
+};
 export default NavList;
