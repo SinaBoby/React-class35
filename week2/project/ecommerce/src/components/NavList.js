@@ -1,23 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import NavListItem from './NavListItem';
 
-const NavList = ({ setProducts,setSelectedCategory }) => {
+const NavList = ({
+  setProducts,
+  setProdLoading,
+  setProdError,
+}) => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [categories, setCategories] = useState([]);
   const [isloading, setIsloading] = useState(true);
+  const [error, setError] = useState(null);
   useEffect(() => {
     (async () => {
       try {
         const response = await fetch('https://fakestoreapi.com/products');
         const json = await response.json();
         setProducts(json);
-      
+        setProdLoading(false);
       } catch (error) {
         console.log(error);
+        setProdError(error);
+        setProdLoading(false);
       }
     })();
   }, [setProducts]);
- 
+
   useEffect(() => {
     (async () => {
       try {
@@ -25,25 +32,29 @@ const NavList = ({ setProducts,setSelectedCategory }) => {
           'https://fakestoreapi.com/products/categories',
         );
         const json = await response.json();
-        console.log(json);
         setCategories(json);
         setIsloading(false);
       } catch (error) {
         console.log(error);
+        setError(error);
+        setIsloading(false);
       }
     })();
   }, []);
   const handleCategory = (categoryName) => {
     (async () => {
       try {
-        setSelectedCategory(categoryName)
+        setProdLoading(true);
         const response = await fetch(
           `https://fakestoreapi.com/products/category/${categoryName}`,
         );
         const json = await response.json();
         setProducts(json);
+        setProdLoading(false);
       } catch (error) {
         console.log(error);
+        setProdError(error);
+        setProdLoading(false);
       }
     })();
   };
@@ -52,8 +63,8 @@ const NavList = ({ setProducts,setSelectedCategory }) => {
     <div className="categories">
       {isloading ? (
         <h3>Is Loading...</h3>
-      ) : !categories ? (
-        <h3>No categories(Server Error)</h3>
+      ) : error ? (
+        <h3>{error.message}</h3>
       ) : (
         categories.map((category, index) => (
           <NavListItem
@@ -62,7 +73,6 @@ const NavList = ({ setProducts,setSelectedCategory }) => {
             onClickFunc={() => setSelectedIndex(index)}
             category={category}
             handleCategory={handleCategory}
-            setProducts={setProducts}
           />
         ))
       )}

@@ -5,6 +5,7 @@ import DetailPage from './DetailPage'
 function DetailProduct(){
   const [product, setProduct] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState(null)
   const {id} = useParams()
   useEffect(() => {
     (async () => {
@@ -16,11 +17,13 @@ function DetailProduct(){
        setIsLoading(false)
       }catch(error){
         console.log(error)
+        setError(error)
+        setIsLoading(false)
       }
     })()
   },[id])
 return (<div className='detailCard'>
- {isLoading ? <h2>Is Loading...</h2> : product ? <DetailPage product={product} /> : <h2>no product</h2> }
+ {isLoading ? <h2>Is Loading...</h2> : error ? <h2>{error.message}</h2> :  <DetailPage product={product} />  }
 
 </div>
 )

@@ -7,18 +7,28 @@ import ProductList from './components/ProductList';
 
 function App() {
   const [products, setProducts] = useState([]);
-  const [selectedcategory, setSelectedCategory] = useState([])
-  
- console.log(selectedcategory)
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+ 
 
   return (
     <div className="App">
       <header>
         <h1>Products</h1>
-        <NavList setProducts={setProducts} setSelectedCategory={setSelectedCategory}  />
+        <NavList
+          setProducts={setProducts}
+          setProdLoading={setLoading}
+          setProdError={setError}
+        />
       </header>
       <main>
-        <ProductList products={products} />
+        {loading ? (
+          <h2>is Loading...</h2>
+        ) : error ? (
+          <h2>{error.message}</h2>
+        ) : (
+          <ProductList products={products} />
+        )}
       </main>
     </div>
   );
